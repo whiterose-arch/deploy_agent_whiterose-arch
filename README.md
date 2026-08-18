@@ -60,9 +60,3 @@ The config file is in `Helpers/config.json`. You can change:
 - `total_sessions` - total number of classes
 
 The setup script also asks you for warning and failure values when you first run it.
-
-## Notes
-
-- Old report logs get renamed with a timestamp before a new run
-- Sample student data is already in `assets.csv`
-- Make sure you're inside the project folder when running the Python script
