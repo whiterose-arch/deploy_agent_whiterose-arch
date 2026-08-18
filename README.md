@@ -1,45 +1,22 @@
-# Attendance Tracker Lab
+# Automated Project Bootstrapping
 
-This is my Linux lab project. It sets up a small attendance tracking system using a bash script and a Python script.
-
-## What it does
-
-The setup script creates a project folder with:
-- a Python script that reads student attendance from a CSV file
-- a config file for warning/failure thresholds
-- a reports folder where alerts get logged
-
-Students below the failure threshold get an urgent message. Students below the warning threshold get a warning.
-
-## Requirements
-
-- Linux
-- Bash
-- Python 3
+This is my Individual Lab. I wrote `setup_project.sh` to bootstrap the Student Attendance Tracker workspace. The python script, csv, config, and log files were given to us. The shell script creates the folders and files, lets you change the thresholds, checks that python3 is installed, and archives the project if you press Ctrl+C.
 
 ## How to run
 
-1. Make the setup script executable:
-   ```
-   chmod +x setup_project.sh
-   ```
+Make the script executable (only need to do this once):
 
-2. Run it with your name or student id:
-   ```
-   ./setup_project.sh yourname
-   ```
+```
+chmod +x setup_project.sh
+```
 
-   This creates a folder called `attendance_tracker_yourname`.
+Run it and pass a name. That name is used for the folder:
 
-3. Go into that folder and run the checker:
-   ```
-   cd attendance_tracker_yourname
-   python3 attendance_checker.py
-   ```
+```
+./setup_project.sh yourname
+```
 
-4. When you're done, press `Ctrl+C` in the setup terminal. The script will archive the project into a `.tar.gz` file.
-
-## Project structure
+This creates `attendance_tracker_yourname` with this structure:
 
 ```
 attendance_tracker_yourname/
@@ -51,12 +28,24 @@ attendance_tracker_yourname/
     └── reports.log
 ```
 
-## Config
+The script will ask if you want to change the warning and failure percentages. Default warning is 75 and default failure is 50. Just press Enter to keep the defaults, or type a new number. It uses `sed` to update `Helpers/config.json`.
 
-The config file is in `Helpers/config.json`. You can change:
-- `warning` - attendance % for warnings (default 75)
-- `failure` - attendance % for failure alerts (default 50)
-- `run_mode` - use `"live"` to write to the log, or something else for dry run
-- `total_sessions` - total number of classes
+At the end it does a health check. It runs `python3 --version` and also checks that all the folders and files were created.
 
-The setup script also asks you for warning and failure values when you first run it.
+## How to trigger the archive
+
+The script has a trap for SIGINT (Ctrl+C).
+
+While the script is still running (for example when it is waiting for you to type the threshold values), press:
+
+```
+Ctrl + C
+```
+
+What happens:
+
+1. The trap catches the interrupt
+2. The project folder is packed into `attendance_tracker_yourname_archive.tar.gz`
+3. The original folder is deleted so the workspace stays clean
+
+If you let the script finish normally, nothing gets archived. You have to interrupt it with Ctrl+C.
